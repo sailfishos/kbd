@@ -1,0 +1,45 @@
+diff -urN kbd-1.15.orig/data/keymaps/i386/include/linux-keys-bare.inc kbd-1.15/data/keymaps/i386/include/linux-keys-bare.inc
+--- kbd-1.15.orig/data/keymaps/i386/include/linux-keys-bare.inc	2008-10-24 03:03:58.000000000 +0800
++++ kbd-1.15/data/keymaps/i386/include/linux-keys-bare.inc	2011-02-15 14:47:05.000000000 +0800
+@@ -63,18 +63,18 @@
+ # (in order to please Linux / dosemu / X).
+ # Here Consoles 1..12. For 13..24 load linux-keys-extd.inc
+ #
+-alt keycode  59 = Console_1
+-alt keycode  60 = Console_2
+-alt keycode  61 = Console_3
+-alt keycode  62 = Console_4
+-alt keycode  63 = Console_5
+-alt keycode  64 = Console_6
+-alt keycode  65 = Console_7
+-alt keycode  66 = Console_8
+-alt keycode  67 = Console_9
+-alt keycode  68 = Console_10
+-alt keycode  87 = Console_11
+-alt keycode  88 = Console_12
++alt keycode  59 = nul
++alt keycode  60 = nul
++alt keycode  61 = nul
++alt keycode  62 = nul
++alt keycode  63 = nul
++alt keycode  64 = nul
++alt keycode  65 = nul
++alt keycode  66 = nul
++alt keycode  67 = nul
++alt keycode  68 = nul
++alt keycode  87 = nul
++alt keycode  88 = nul
+ control alt keycode  59 = Console_1
+ control alt keycode  60 = Console_2
+ control alt keycode  61 = Console_3
+@@ -130,8 +130,8 @@
+ keycode 106 = Right
+ keycode 108 = Down
+ alt keycode 103 = KeyboardSignal
+-alt keycode 105 = Decr_Console
+-alt keycode 106 = Incr_Console
++alt keycode 105 = nul
++alt keycode 106 = nul
+ #
+ # The six edit keys
+ #

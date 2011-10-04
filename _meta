@@ -1,0 +1,10 @@
+<package project="Mer:Trunk:Base" name="kbd">
+  <title>Tools for configuring the console (keyboard, virtual terminals, etc.)</title>
+  <description>The %{name} package contains tools for managing a Linux
+system's console's behavior, including the keyboard, the screen
+fonts, the virtual terminals and font files.
+
+
+</description>
+  <url>http://ftp.altlinux.org/pub/people/legion/kbd</url>
+</package>
