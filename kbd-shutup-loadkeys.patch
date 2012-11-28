@@ -1,12 +1,13 @@
-diff -Nurb kbd-1.15.orig/src/loadkeys.c kbd-1.15/src/loadkeys.c
---- kbd-1.15.orig/src/loadkeys.c	2008-10-23 12:03:59.000000000 -0700
-+++ kbd-1.15/src/loadkeys.c	2010-02-11 15:38:23.160128757 -0800
-@@ -2360,7 +2360,7 @@
- 	*/
-       gotf:
- 	filename = xstrdup(pathname);
--	if (!quiet && !optm)
-+	if (verbose && !optm)
- 		fprintf(stdout, _("Loading %s\n"), pathname);
- 	if (first_file) {
- 		yyin = f;
+diff --git a/src/loadkeys.c b/src/loadkeys.c
+index f3a4560..f0fbf85 100644
+--- a/src/loadkeys.c
++++ b/src/loadkeys.c
+@@ -2991,7 +2991,7 @@ int main(int argc, char *argv[])
+ 		}
+ 
+  gotf:
+-		if (!quiet && !optm)
++		if (verbose && !optm)
+ 			fprintf(stdout, _("Loading %s\n"), pathname);
+ 
+ 		stack_push(f, 0, pathname);

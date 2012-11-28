@@ -1,6 +1,6 @@
 Name:           kbd
-Version:        1.15
-Release:        9
+Version:        1.15.3
+Release:        1
 Summary:        Tools for configuring the console (keyboard, virtual terminals, etc.)
 
 Group:          System/Base
@@ -10,15 +10,12 @@ Source0:        http://ftp.altlinux.org/pub/people/legion/kbd/kbd-%{version}.tar
 Source1:        kbd-latsun-fonts.tar.bz2
 Source2:        ro_maps.tar.bz2
 Source3:        kbd-latarcyrheb-16-fixed.tar.bz2
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-Patch0:         kbd-1.15-po.patch
 Patch1:         kbd-1.15-keycodes-man.patch
-Patch2:         kbd-1.15-sparc.patch
 Patch3:         kbd-1.15-unicode_start.patch
 Patch4:         kbd-1.15-resizecon-x86_64.patch
-Patch5:         kbd-1.15-quiet_doc.patch
 Patch6:         kbd-shutup-loadkeys.patch
 Patch7:         kbd-1.15-disable-alt-tty-switch.patch
+Patch8:         kbd-1.15.3-fix-es-translation.patch
 
 BuildRequires:  bison, flex, gettext
 
@@ -37,17 +34,14 @@ Requires: kbd = %{version}-%{release}
 Documentation for kbd package
 
 
-
 %prep
 %setup -q -a 1 -a 2 -a 3
-%patch0 -p1 -b .po
 %patch1 -p1 -b .keycodes-man
-%patch2 -p1 -b .sparc
 %patch3 -p1 -b .unicode_start
 %patch4 -p1 -b .resizecon_x86_64
-%patch5 -p1 -b .quiet_doc
 %patch6 -p1 -b .shutup_loadkeys
 %patch7 -p1 
+%patch8 -p1
 
 # 7-bit maps are obsolete; so are non-euro maps
 pushd data/keymaps/i386
@@ -67,6 +61,11 @@ mv fgGIod/trf.map fgGIod/trf-fgGIod.map
 mv olpc/es.map olpc/es-olpc.map
 mv olpc/pt.map olpc/pt-olpc.map
 mv qwerty/cz.map qwerty/cz-qwerty.map
+popd
+
+# remove obsolete "gr" translation
+pushd po
+rm -f gr.po gr.gmo
 popd
 
 # Convert to utf-8
@@ -108,9 +107,6 @@ sed -i -e 's,\<kbd_mode\>,/bin/kbd_mode,g;s,\<setfont\>,/bin/setfont,g' \
 ln -s openvt $RPM_BUILD_ROOT%{_bindir}/open
 
 %find_lang %{name}
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)

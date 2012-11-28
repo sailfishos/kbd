@@ -1,3 +1,9 @@
+* Wed Nov 28 2012 Marko Saukko <marko.saukko@jollamobile.com> - 1.15.3
+- Update to version 1.15.3
+- Drop upstreamed patches: kbd-1.15-sparc.patch, kbd-1.15-quiet_doc.patch
+- Drop kbd-1.15-po.patch as it is merged in .spec now
+- Added kbd-1.15.3-fix-es-translation.patch from fedora.
+
 * Wed Jun 29 2011 Chris Ferron <chris.e.ferron@linux.intel.com> - 1.15
 - removed fastinit
 
