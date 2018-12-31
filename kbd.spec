@@ -1,6 +1,6 @@
 Name:           kbd
 Version:        1.15.3
-Release:        1
+Release:        2
 Summary:        Tools for configuring the console (keyboard, virtual terminals, etc.)
 
 Group:          System/Base
@@ -26,12 +26,12 @@ fonts, the virtual terminals and font files.
 
 
 %package doc
-Summary: Documentation for kbd
+Summary: Documentation for %{name}
 Group: Documentation
 Requires: kbd = %{version}-%{release}
 
 %description doc
-Documentation for kbd package
+Documentation and man pages for %{name}.
 
 
 %prep
@@ -106,16 +106,25 @@ sed -i -e 's,\<kbd_mode\>,/bin/kbd_mode,g;s,\<setfont\>,/bin/setfont,g' \
 # Link open to openvt
 ln -s openvt $RPM_BUILD_ROOT%{_bindir}/open
 
+mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}
+install -m0644 -t $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} \
+	AUTHORS README ChangeLog doc/kbd.FAQ*.html doc/font-formats/*.html \
+	doc/utf/utf* doc/dvorak/*
+
 %find_lang %{name}
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
-%doc AUTHORS README COPYING
+%license COPYING
 /bin/*
 %{_bindir}/*
-%{_mandir}/*/*
-/lib/kbd
+%dir /lib/kbd
+/lib/kbd/consolefonts
+/lib/kbd/consoletrans
+/lib/kbd/keymaps
+/lib/kbd/unimaps
 
 %files doc
-%doc AUTHORS README COPYING doc/kbd.FAQ*.html doc/font-formats/*.html doc/utf/utf* doc/dvorak/* ChangeLog
-
+%defattr(-, root, root, -)
+%doc %{_docdir}/%{name}-%{version}
+%{_mandir}/*/*

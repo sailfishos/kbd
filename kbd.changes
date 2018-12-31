@@ -1,3 +1,7 @@
+* Wed Jan 02 2019 Tomi Leppänen <tomi.leppanen@jolla.com> - 1.15.3-2
+- [kbd] Move man pages to doc subpackage. Contributes to JB#24119
+- Fix file listed twice warnings with language files
+
 * Wed Nov 28 2012 Marko Saukko <marko.saukko@jollamobile.com> - 1.15.3
 - Update to version 1.15.3
 - Drop upstreamed patches: kbd-1.15-sparc.patch, kbd-1.15-quiet_doc.patch
