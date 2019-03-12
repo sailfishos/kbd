@@ -1,7 +1,7 @@
-diff -up kbd-1.15/man/man1/showkey.1_old kbd-1.15/man/man1/showkey.1
---- kbd-1.15/man/man1/showkey.1_old	2008-03-13 17:46:23.000000000 +0100
-+++ kbd-1.15/man/man1/showkey.1	2008-12-10 12:31:38.000000000 +0100
-@@ -80,6 +80,19 @@ corresponds to what the keyboard hardwar
+diff -up kbd-1.15/docs/man/man1/showkey.1_old kbd-1.15/docs/man/man1/showkey.1
+--- kbd-1.15/docs/man/man1/showkey.1_old	2008-03-13 17:46:23.000000000 +0100
++++ kbd-1.15/docs/man/man1/showkey.1	2008-12-10 12:31:38.000000000 +0100
+@@ -84,6 +84,19 @@ corresponds to what the keyboard hardwar
  to know the scan codes sent by various keys it is better to boot a
  2.4 kernel. Since 2.6.9 there also is the boot option atkbd.softraw=0
  that tells the 2.6 kernel to return the actual scan codes.
@@ -21,12 +21,12 @@ diff -up kbd-1.15/man/man1/showkey.1_old kbd-1.15/man/man1/showkey.1
  .SH "SEE ALSO"
  .BR loadkeys (1),
  .BR dumpkeys (1),
-diff -up kbd-1.15/man/man8/setkeycodes.8_old kbd-1.15/man/man8/setkeycodes.8
---- kbd-1.15/man/man8/setkeycodes.8_old	2008-12-10 12:31:56.000000000 +0100
-+++ kbd-1.15/man/man8/setkeycodes.8	2008-12-10 12:37:36.000000000 +0100
-@@ -41,6 +41,10 @@ to showkey(1), the command
- will assign the keycode 112 to it, and then loadkeys(1) can be used
- to define the function of this key.
+diff -up kbd-1.15/docs/man/man8/setkeycodes.8_old kbd-1.15/docs/man/man8/setkeycodes.8
+--- kbd-1.15/docs/man/man8/setkeycodes.8_old	2008-12-10 12:31:56.000000000 +0100
++++ kbd-1.15/docs/man/man8/setkeycodes.8	2008-12-10 12:37:36.000000000 +0100
+@@ -43,6 +43,10 @@ to showkey(1), the command
+ equivalent keycodes; setkeycodes will fail when you try to remap
+ these.
  
 +USB keyboards have standardized keycodes and
 +.B setkeycodes
@@ -35,7 +35,7 @@ diff -up kbd-1.15/man/man8/setkeycodes.8_old kbd-1.15/man/man8/setkeycodes.8
  .SH "2.6 KERNELS"
  In 2.6 kernels key codes lie in the range 1-255, instead of 1-127.
  (It might be best to confine oneself to the range 1-239.)
-@@ -54,6 +58,14 @@ None.
+@@ -56,6 +60,14 @@ None.
  .SH BUGS
  The keycodes of X have nothing to do with those of Linux.
  Unusual keys can be made visible under Linux, but not under X.

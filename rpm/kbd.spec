@@ -1,23 +1,18 @@
 Name:           kbd
-Version:        1.15.3
-Release:        2
+Version:        2.0.4
+Release:        1
 Summary:        Tools for configuring the console (keyboard, virtual terminals, etc.)
 
 Group:          System/Base
 License:        GPLv2+
-URL:            http://ftp.altlinux.org/pub/people/legion/kbd
-Source0:        http://ftp.altlinux.org/pub/people/legion/kbd/kbd-%{version}.tar.gz
-Source1:        kbd-latsun-fonts.tar.bz2
-Source2:        ro_maps.tar.bz2
-Source3:        kbd-latarcyrheb-16-fixed.tar.bz2
+URL:            http://kbd-project.org/
+Source0:        https://git.kernel.org/pub/scm/linux/kernel/git/legion/kbd.git/snapshot/kbd-%{version}.tar.gz
+Source1:        kbd-latarcyrheb-16-fixed.tar.bz2
 Patch1:         kbd-1.15-keycodes-man.patch
 Patch3:         kbd-1.15-unicode_start.patch
-Patch4:         kbd-1.15-resizecon-x86_64.patch
-Patch6:         kbd-shutup-loadkeys.patch
 Patch7:         kbd-1.15-disable-alt-tty-switch.patch
-Patch8:         kbd-1.15.3-fix-es-translation.patch
 
-BuildRequires:  bison, flex, gettext
+BuildRequires:  bison, flex, gettext, pam-devel
 
 %description
 The %{name} package contains tools for managing a Linux
@@ -35,18 +30,13 @@ Documentation and man pages for %{name}.
 
 
 %prep
-%setup -q -a 1 -a 2 -a 3
+%setup -q -n %{name}-%{version}/%{name} -a 1
 %patch1 -p1 -b .keycodes-man
 %patch3 -p1 -b .unicode_start
-%patch4 -p1 -b .resizecon_x86_64
-%patch6 -p1 -b .shutup_loadkeys
 %patch7 -p1 
-%patch8 -p1
 
 # 7-bit maps are obsolete; so are non-euro maps
 pushd data/keymaps/i386
-mv qwerty/fi.map qwerty/fi-old.map
-cp qwerty/fi-latin9.map qwerty/fi.map
 cp qwerty/pt-latin9.map qwerty/pt.map
 cp qwerty/sv-latin1.map qwerty/se-latin1.map
 
@@ -73,6 +63,7 @@ iconv -f iso-8859-1 -t utf-8 < "ChangeLog" > "ChangeLog_"
 mv "ChangeLog_" "ChangeLog"
 
 %build
+./autogen.sh
 %configure --prefix=%{_prefix} --datadir=/lib/kbd --mandir=%{_mandir} --localedir=%{_datadir}/locale --enable-nls
 make %{?_smp_mflags}
 
@@ -105,11 +96,12 @@ sed -i -e 's,\<kbd_mode\>,/bin/kbd_mode,g;s,\<setfont\>,/bin/setfont,g' \
 
 # Link open to openvt
 ln -s openvt $RPM_BUILD_ROOT%{_bindir}/open
+ln -s openvt.1.gz $RPM_BUILD_ROOT%{_mandir}/man1/open.1.gz
 
 mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}
 install -m0644 -t $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} \
-	AUTHORS README ChangeLog doc/kbd.FAQ*.html doc/font-formats/*.html \
-	doc/utf/utf* doc/dvorak/*
+	AUTHORS README ChangeLog docs/doc/kbd.FAQ*.html docs/doc/font-formats/*.html \
+	docs/doc/utf/utf* docs/doc/dvorak/*
 
 %find_lang %{name}
 
