@@ -1,0 +1,3 @@
+[submodule "kbd"]
+	path = kbd
+	url = https://git.merproject.org/mirror/kbd.git
