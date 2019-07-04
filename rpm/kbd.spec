@@ -33,7 +33,7 @@ Documentation and man pages for %{name}.
 %setup -q -n %{name}-%{version}/%{name} -a 1
 %patch1 -p1 -b .keycodes-man
 %patch3 -p1 -b .unicode_start
-%patch7 -p1 
+%patch7 -p1
 
 # 7-bit maps are obsolete; so are non-euro maps
 pushd data/keymaps/i386
@@ -64,7 +64,7 @@ mv "ChangeLog_" "ChangeLog"
 
 %build
 ./autogen.sh
-%configure --prefix=%{_prefix} --datadir=/lib/kbd --mandir=%{_mandir} --localedir=%{_datadir}/locale --enable-nls
+%configure --prefix=%{_prefix} --datadir=/usr/lib/kbd --mandir=%{_mandir} --localedir=%{_datadir}/locale --enable-nls
 make %{?_smp_mflags}
 
 %install
@@ -75,24 +75,18 @@ make install DESTDIR=$RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT/lib/kbd/keymaps/i386/qwerty/ro_win.map.gz
 
 # Create additional name for Serbian latin keyboard
-ln -s sr-cy.map.gz $RPM_BUILD_ROOT/lib/kbd/keymaps/i386/qwerty/sr-latin.map.gz
+ln -s sr-cy.map.gz $RPM_BUILD_ROOT/usr/lib/kbd/keymaps/i386/qwerty/sr-latin.map.gz
 
 # Create additional name for Chinese keyboard
-ln -s us.map.gz $RPM_BUILD_ROOT/lib/kbd/keymaps/i386/qwerty/cn.map.gz
+ln -s us.map.gz $RPM_BUILD_ROOT/usr/lib/kbd/keymaps/i386/qwerty/cn.map.gz
 
 # The rhpl keyboard layout table is indexed by kbd layout names, so we need a
 # Korean keyboard
-ln -s us.map.gz $RPM_BUILD_ROOT/lib/kbd/keymaps/i386/qwerty/ko.map.gz
-
-# Move binaries which we use before /usr is mounted from %{_bindir} to /bin.
-mkdir -p $RPM_BUILD_ROOT/bin
-for binary in setfont dumpkeys kbd_mode unicode_start unicode_stop loadkeys ; do
-  mv $RPM_BUILD_ROOT%{_bindir}/$binary $RPM_BUILD_ROOT/bin/
-done
+ln -s us.map.gz $RPM_BUILD_ROOT/usr/lib/kbd/keymaps/i386/qwerty/ko.map.gz
 
 # Some microoptimization
-sed -i -e 's,\<kbd_mode\>,/bin/kbd_mode,g;s,\<setfont\>,/bin/setfont,g' \
-        $RPM_BUILD_ROOT/bin/unicode_start
+sed -i -e 's,\<kbd_mode\>,/usr/bin/kbd_mode,g;s,\<setfont\>,/usr/bin/setfont,g' \
+        $RPM_BUILD_ROOT/usr/bin/unicode_start
 
 # Link open to openvt
 ln -s openvt $RPM_BUILD_ROOT%{_bindir}/open
@@ -108,13 +102,12 @@ install -m0644 -t $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} \
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %license COPYING
-/bin/*
 %{_bindir}/*
-%dir /lib/kbd
-/lib/kbd/consolefonts
-/lib/kbd/consoletrans
-/lib/kbd/keymaps
-/lib/kbd/unimaps
+%dir %{_libdir}/kbd
+%{_libdir}/kbd/consolefonts
+%{_libdir}/kbd/consoletrans
+%{_libdir}/kbd/keymaps
+%{_libdir}/kbd/unimaps
 
 %files doc
 %defattr(-, root, root, -)
