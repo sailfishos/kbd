@@ -1,0 +1,24 @@
+diff -up kbd-2.6.2/src/loadkeys.c.orig kbd-2.6.2/src/loadkeys.c
+--- kbd-2.6.2/src/loadkeys.c.orig	2023-08-22 10:02:52.261785310 +0200
++++ kbd-2.6.2/src/loadkeys.c	2023-08-22 10:03:44.351889761 +0200
+@@ -27,6 +27,8 @@
+ 
+ static const char *const dirpath1[] = {
+ 	DATADIR "/" KEYMAPDIR "/**",
++	DATADIR "/" XKBKEYMAPDIR "/",
++	DATADIR "/" LEGACYKEYMAPDIR "/**",
+ 	KERNDIR "/",
+ 	NULL
+ };
+diff -up kbd-2.6.2/src/paths.h.orig kbd-2.6.2/src/paths.h
+--- kbd-2.6.2/src/paths.h.orig	2023-08-22 10:04:03.021927193 +0200
++++ kbd-2.6.2/src/paths.h	2023-08-22 10:04:35.740992805 +0200
+@@ -5,6 +5,8 @@
+  * The following five subdirectories are defined:
+  */
+ #define KEYMAPDIR "keymaps"
++#define XKBKEYMAPDIR "keymaps/xkb"
++#define LEGACYKEYMAPDIR "keymaps/legacy"
+ #define UNIMAPDIR "unimaps"
+ #define TRANSDIR "consoletrans"
+ #define VIDEOMODEDIR "videomodes"
