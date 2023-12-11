@@ -1,15 +1,24 @@
 Name:           kbd
-Version:        2.0.4
+Version:        2.6.3
 Release:        1
 Summary:        Tools for configuring the console (keyboard, virtual terminals, etc.)
-
-Group:          System/Base
 License:        GPLv2+
 URL:            http://kbd-project.org/
-Source0:        https://git.kernel.org/pub/scm/linux/kernel/git/legion/kbd.git/snapshot/kbd-%{version}.tar.gz
+Source0:        %{name}-%{version}.tar.gz
 Source1:        kbd-latarcyrheb-16-fixed.tar.bz2
-Patch1:         kbd-1.15-keycodes-man.patch
-Patch3:         kbd-1.15-unicode_start.patch
+# Patch0: puts additional information into man pages
+Patch0:         kbd-1.15-keycodes-man.patch
+# Patch2: adds default unicode font to unicode_start script
+Patch2:         kbd-1.15-unicode_start.patch
+# Patch3: fixes decimal separator in Swiss German keyboard layout, bz 882529
+Patch3:         kbd-1.15.5-sg-decimal-separator.patch
+# Patch4: adds xkb and legacy keymaps subdirs to loadkyes search path, bz 1028207
+Patch4:         kbd-1.15.5-loadkeys-search-path.patch
+# Patch5: don't hardcode font used in unicode_start, take it from vconsole.conf,
+#   bz 1101007
+Patch5:         kbd-2.0.2-unicode-start-font.patch
+# Patch6: fixes issues found by static analysis
+Patch6:         kbd-2.4.0-covscan-fixes.patch
 Patch7:         kbd-1.15-disable-alt-tty-switch.patch
 
 BuildRequires:  bison, flex, gettext, pam-devel
@@ -22,7 +31,6 @@ fonts, the virtual terminals and font files.
 
 %package doc
 Summary: Documentation for %{name}
-Group: Documentation
 Requires: kbd = %{version}-%{release}
 
 %description doc
@@ -30,10 +38,7 @@ Documentation and man pages for %{name}.
 
 
 %prep
-%setup -q -n %{name}-%{version}/%{name} -a 1
-%patch1 -p1 -b .keycodes-man
-%patch3 -p1 -b .unicode_start
-%patch7 -p1 
+%autosetup -p1 -n %{name}-%{version}/%{name} -a 1
 
 # 7-bit maps are obsolete; so are non-euro maps
 pushd data/keymaps/i386
@@ -46,7 +51,6 @@ cp azerty/fr-latin9.map azerty/fr.map
 cp azerty/fr-latin9.map azerty/fr-latin0.map # legacy alias
 
 # Rename conflicting keymaps
-mv dvorak/no.map dvorak/no-dvorak.map
 mv fgGIod/trf.map fgGIod/trf-fgGIod.map
 mv olpc/es.map olpc/es-olpc.map
 mv olpc/pt.map olpc/pt-olpc.map
@@ -64,7 +68,7 @@ mv "ChangeLog_" "ChangeLog"
 
 %build
 ./autogen.sh
-%configure --prefix=%{_prefix} --datadir=/lib/kbd --mandir=%{_mandir} --localedir=%{_datadir}/locale --enable-nls
+%configure --prefix=%{_prefix} --datadir=/lib/kbd --mandir=%{_mandir} --localedir=%{_datadir}/locale --enable-nls --disable-vlock
 make %{?_smp_mflags}
 
 %install
@@ -90,18 +94,18 @@ for binary in setfont dumpkeys kbd_mode unicode_start unicode_stop loadkeys ; do
   mv $RPM_BUILD_ROOT%{_bindir}/$binary $RPM_BUILD_ROOT/bin/
 done
 
-# Some microoptimization
-sed -i -e 's,\<kbd_mode\>,/bin/kbd_mode,g;s,\<setfont\>,/bin/setfont,g' \
-        $RPM_BUILD_ROOT/bin/unicode_start
+# https://bugzilla.redhat.com/show_bug.cgi?id=2015972
+# xkb Arabic layout is 'ara', not 'fa', langtable tells us to use 'ara'
+ln -s fa.map.gz $RPM_BUILD_ROOT/lib/kbd/keymaps/i386/qwerty/ara.map.gz
 
-# Link open to openvt
-ln -s openvt $RPM_BUILD_ROOT%{_bindir}/open
-ln -s openvt.1.gz $RPM_BUILD_ROOT%{_mandir}/man1/open.1.gz
+# Some microoptimization
+sed -i -e 's,\<kbd_mode\>,%{_bindir}/kbd_mode,g;s,\<setfont\>,%{_bindir}/setfont,g' \
+        $RPM_BUILD_ROOT/bin/unicode_start
 
 mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}
 install -m0644 -t $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} \
-	AUTHORS README ChangeLog docs/doc/kbd.FAQ*.html docs/doc/font-formats/*.html \
-	docs/doc/utf/utf* docs/doc/dvorak/*
+        AUTHORS README ChangeLog docs/doc/kbd.FAQ*.html docs/doc/font-formats/*.html \
+        docs/doc/utf/utf* docs/doc/dvorak/*
 
 %find_lang %{name}
 
